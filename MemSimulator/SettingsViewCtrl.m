@@ -13,7 +13,10 @@
 
 @end
 
-@implementation SettingsViewCtrl
+@implementation SettingsViewCtrl {
+    NSArray* arrAlgorithm;
+    UITextField* currentEditing;
+}
 
 @synthesize txtMemorySize;
 @synthesize txtPageSize;
@@ -27,7 +30,7 @@
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
-    
+    arrAlgorithm = @[@{@"code":@"FIFO",@"desc":@"First In First Out"},@{@"code":@"LRU",@"desc":@"Least Recent Used"},@{@"code":@"CLOCK",@"desc":@"Clockwise (Valid Bit)"}];
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.detailViewCtrl = (DetailViewCtrl*)[[self.splitViewController.viewControllers lastObject] topViewController];
@@ -117,6 +120,97 @@
 }
 */
 
+#pragma mark - TextField Delegate 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    NSInteger nextTag = textField.tag + 1;
+    switch (nextTag) {
+        case 1:
+            [txtPageSize becomeFirstResponder];
+            break;
+        case 2:
+            [txtTlbSize becomeFirstResponder];
+            break;
+        case 3:
+            [txtTlbAlgorithm becomeFirstResponder];
+            break;
+        case 4:
+            [txtPageAlgorithm becomeFirstResponder];
+            break;
+        case 5:
+            [txtFrameAvailable becomeFirstResponder];
+            break;
+        default:
+            break;
+    }
+    return YES;
+}
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField {
+    currentEditing = textField;
+    switch (textField.tag) {
+        case 3:
+        case 4:
+            [textField setInputAccessoryView:[self createToolBar]];
+            [textField setInputView:[self createPickerView]];
+            break;
+        default:
+            break;
+    }
+}
+
+#pragma mark - PickerView Datasource & delegate 
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    return arrAlgorithm.count;
+}
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    NSString* code = [[arrAlgorithm objectAtIndex:row] objectForKey:@"code"];
+    NSString* desc = [[arrAlgorithm objectAtIndex:row] objectForKey:@"desc"];
+    return [NSString stringWithFormat:@"%@-%@",code,desc];
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    [currentEditing setText:[[arrAlgorithm objectAtIndex:row] objectForKey:@"code"]];
+}
+
+- (void)pickerButtonNextClick {
+    switch (currentEditing.tag) {
+        case 3:
+            [txtPageAlgorithm becomeFirstResponder];
+            break;
+        case 4:
+            [txtFrameAvailable becomeFirstResponder];
+        default:
+            break;
+    }
+}
+
+- (void)pickerButtonDoneClick {
+    [currentEditing resignFirstResponder];
+}
+
+#pragma mark - PickerView Create
+- (UIPickerView*)createPickerView {
+    UIPickerView* pickerView = [[UIPickerView alloc] init];
+    [pickerView setDelegate:self];
+    [pickerView setDataSource:self];
+    return pickerView;
+}
+
+- (UIToolbar*)createToolBar {
+    UIToolbar* pickerTool = [[UIToolbar alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 44.0)];
+    UIBarButtonItem* flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIBarButtonItem* buttonNext = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(pickerButtonNextClick)];
+    UIBarButtonItem* buttonDone = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(pickerButtonDoneClick)];
+    [pickerTool setItems:@[buttonNext,flexibleSpace,buttonDone]];
+    return pickerTool;
+}
+
 #pragma mark - Navigation
 /*
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -157,6 +251,14 @@
 }
 
 - (IBAction)btnResetClick:(id)sender {
+    NSDictionary* settings = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"SimSettings" ofType:@"plist"]];
+    
+    [txtMemorySize setText:[NSString stringWithFormat:@"%@",[settings objectForKey:@"memorysize"]]];
+    [txtPageSize setText:[NSString stringWithFormat:@"%@",[settings objectForKey:@"pagesize"]]];
+    [txtTlbSize setText:[NSString stringWithFormat:@"%@",[settings objectForKey:@"tlbsize"]]];
+    [txtTlbAlgorithm setText:[settings objectForKey:@"tlbalgorithm"]];
+    [txtPageAlgorithm setText:[settings objectForKey:@"pagealgorithm"]];
+    [txtFrameAvailable setText:[settings objectForKey:@"frameavailable"]];
 }
 
 @end

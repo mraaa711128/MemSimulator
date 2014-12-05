@@ -10,7 +10,7 @@
 
 #import "DetailViewCtrl.h"
 
-@interface SettingsViewCtrl : UITableViewController
+@interface SettingsViewCtrl : UITableViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 
 @property (strong, nonatomic) DetailViewCtrl* detailViewCtrl;
 

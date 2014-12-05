@@ -81,26 +81,7 @@
         NSNumber* accPageNo = [NSNumber numberWithInteger:(decAddress / mPageSize.integerValue)];
         NSNumber* accOffset = [NSNumber numberWithInteger:(decAddress % mPageSize.integerValue)];
 
-/*
-//        // Check Tlb Exist
-//        NSDictionary* dictTlbListItem = [self checkTlbListWithPageNo:accPageNo];
-//        if (dictTlbListItem != nil) {    // Access Success from Tlb
-//            [self addMemoryAccessHistoryWithPageNo:accPageNo AndFrameNo:[dictTlbListItem objectForKey:@"frameno"] AndOffset:accOffset AndTlbHit:YES AndPageHit:NO AndTlbEntry:[dictTlbListItem objectForKey:@"seq"]];
-//        } else {    //Tlb Miss
-//            // Check Page Table Exist
-//            NSDictionary* dictPageListItem = [self checkPageListWithPageNo:accPageNo];
-//            if (dictPageListItem != nil) {   //Access Success from Page Table
-//                
-//            } else {    //Page Fault
-//                // Find Available Free Frame
-//                
-//                // Update Page Table
-//                
-//            }
-//            // Update Tlb
-//            
-//        }
-*/
+
         BOOL isTlbHit = YES;
         BOOL isPageHit = YES;
         
