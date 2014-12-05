@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>memorysize</key>
+	<integer>256</integer>
+	<key>pagesize</key>
+	<integer>16</integer>
+	<key>tlbsize</key>
+	<integer>1</integer>
+	<key>tlbalgorithm</key>
+	<string>FIFO</string>
+	<key>pagealgorithm</key>
+	<string>FIFO</string>
+	<key>frameavailable</key>
+	<string>1,4,5,6</string>
+</dict>
+</plist>

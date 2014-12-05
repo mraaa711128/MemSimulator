@@ -15,6 +15,10 @@
 		E43ABC451A2EC4E400A2CED9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E43ABC441A2EC4E400A2CED9 /* Images.xcassets */; };
 		E43ABC481A2EC4E400A2CED9 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E43ABC461A2EC4E400A2CED9 /* LaunchScreen.xib */; };
 		E43ABC541A2EC4E400A2CED9 /* MemSimulatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E43ABC531A2EC4E400A2CED9 /* MemSimulatorTests.m */; };
+		E43ABC611A2EC88400A2CED9 /* SimulatorViewCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = E43ABC601A2EC88400A2CED9 /* SimulatorViewCtrl.m */; };
+		E43ABC641A2EC8A100A2CED9 /* SettingsViewCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = E43ABC631A2EC8A100A2CED9 /* SettingsViewCtrl.m */; };
+		E43ABC6A1A2ED24800A2CED9 /* DetailViewCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = E43ABC691A2ED24800A2CED9 /* DetailViewCtrl.m */; };
+		E43ABC6C1A2ED91F00A2CED9 /* SimSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = E43ABC6B1A2ED91F00A2CED9 /* SimSettings.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +47,13 @@
 		E43ABC4D1A2EC4E400A2CED9 /* MemSimulatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MemSimulatorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E43ABC521A2EC4E400A2CED9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E43ABC531A2EC4E400A2CED9 /* MemSimulatorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MemSimulatorTests.m; sourceTree = "<group>"; };
+		E43ABC5F1A2EC88400A2CED9 /* SimulatorViewCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimulatorViewCtrl.h; sourceTree = "<group>"; };
+		E43ABC601A2EC88400A2CED9 /* SimulatorViewCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimulatorViewCtrl.m; sourceTree = "<group>"; };
+		E43ABC621A2EC8A100A2CED9 /* SettingsViewCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewCtrl.h; sourceTree = "<group>"; };
+		E43ABC631A2EC8A100A2CED9 /* SettingsViewCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewCtrl.m; sourceTree = "<group>"; };
+		E43ABC681A2ED24800A2CED9 /* DetailViewCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewCtrl.h; sourceTree = "<group>"; };
+		E43ABC691A2ED24800A2CED9 /* DetailViewCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewCtrl.m; sourceTree = "<group>"; };
+		E43ABC6B1A2ED91F00A2CED9 /* SimSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SimSettings.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +95,8 @@
 		E43ABC331A2EC4E400A2CED9 /* MemSimulator */ = {
 			isa = PBXGroup;
 			children = (
+				E43ABC671A2ED21600A2CED9 /* Detail View */,
+				E43ABC5E1A2EC85E00A2CED9 /* Master View */,
 				E43ABC381A2EC4E400A2CED9 /* AppDelegate.h */,
 				E43ABC391A2EC4E400A2CED9 /* AppDelegate.m */,
 				E43ABC3B1A2EC4E400A2CED9 /* MasterViewController.h */,
@@ -103,6 +116,7 @@
 			children = (
 				E43ABC351A2EC4E400A2CED9 /* Info.plist */,
 				E43ABC361A2EC4E400A2CED9 /* main.m */,
+				E43ABC6B1A2ED91F00A2CED9 /* SimSettings.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -124,6 +138,26 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		E43ABC5E1A2EC85E00A2CED9 /* Master View */ = {
+			isa = PBXGroup;
+			children = (
+				E43ABC5F1A2EC88400A2CED9 /* SimulatorViewCtrl.h */,
+				E43ABC601A2EC88400A2CED9 /* SimulatorViewCtrl.m */,
+				E43ABC621A2EC8A100A2CED9 /* SettingsViewCtrl.h */,
+				E43ABC631A2EC8A100A2CED9 /* SettingsViewCtrl.m */,
+			);
+			name = "Master View";
+			sourceTree = "<group>";
+		};
+		E43ABC671A2ED21600A2CED9 /* Detail View */ = {
+			isa = PBXGroup;
+			children = (
+				E43ABC681A2ED24800A2CED9 /* DetailViewCtrl.h */,
+				E43ABC691A2ED24800A2CED9 /* DetailViewCtrl.m */,
+			);
+			name = "Detail View";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -134,6 +168,7 @@
 				E43ABC2D1A2EC4E400A2CED9 /* Sources */,
 				E43ABC2E1A2EC4E400A2CED9 /* Frameworks */,
 				E43ABC2F1A2EC4E400A2CED9 /* Resources */,
+				E43ABC5D1A2EC4FF00A2CED9 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -205,6 +240,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E43ABC431A2EC4E400A2CED9 /* Main.storyboard in Resources */,
+				E43ABC6C1A2ED91F00A2CED9 /* SimSettings.plist in Resources */,
 				E43ABC481A2EC4E400A2CED9 /* LaunchScreen.xib in Resources */,
 				E43ABC451A2EC4E400A2CED9 /* Images.xcassets in Resources */,
 			);
@@ -219,6 +255,22 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		E43ABC5D1A2EC4FF00A2CED9 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Every syntax should be exactly the same\nconf=${CONFIGURATION}\nbuildPlist=${PROJECT_DIR}/${INFOPLIST_FILE}\n# Only increase the build number on Device and AdHoc/AppStore(Release) build\nbundleVersion=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbundleVersion=$(printf \"%d\" \"0x$bundleVersion\")\nbundleVersion=$(($bundleVersion+1))\nbundleVersion=$(printf \"%04x\" \"$bundleVersion\")\nbundleVersion=$(echo $bundleVersion | tr \"a-f\" \"A-F\")\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $bundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"\n\nif [ ${CONFIGURATION} = \"Release\" ]; then\nversion=$(/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nmainVersion=$(echo \"$version\" | awk -F '.' '{print $1}')\nminorVersion=$(echo \"$version\" | awk -F '.' '{print $2}')\nminorVersion=$(($minorVersion+1))\nversion=$(printf \"%d.%d\" \"$mainVersion\" \"$minorVersion\")\n/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString $version\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		E43ABC2D1A2EC4E400A2CED9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -226,8 +278,11 @@
 			files = (
 				E43ABC3A1A2EC4E400A2CED9 /* AppDelegate.m in Sources */,
 				E43ABC3D1A2EC4E400A2CED9 /* MasterViewController.m in Sources */,
+				E43ABC641A2EC8A100A2CED9 /* SettingsViewCtrl.m in Sources */,
+				E43ABC611A2EC88400A2CED9 /* SimulatorViewCtrl.m in Sources */,
 				E43ABC371A2EC4E400A2CED9 /* main.m in Sources */,
 				E43ABC401A2EC4E400A2CED9 /* DetailViewController.m in Sources */,
+				E43ABC6A1A2ED24800A2CED9 /* DetailViewCtrl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
