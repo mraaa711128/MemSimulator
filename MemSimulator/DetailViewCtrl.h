@@ -8,7 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DetailViewCtrl : UIViewController
+@interface DetailViewCtrl : UIViewController <UITableViewDataSource, UITableViewDelegate>
+
+@property (weak, nonatomic) IBOutlet UITableView *tabMemAccessList;
+@property (weak, nonatomic) IBOutlet UITableView *tabTlbList;
+@property (weak, nonatomic) IBOutlet UITableView *tabPageList;
+@property (weak, nonatomic) IBOutlet UITableView *tabMemAddress;
 
 - (void)resetSimulator;
 - (void)setMemoryAccessWithDecimalAddress:(NSInteger)decAddress;

@@ -19,6 +19,10 @@
 		E43ABC641A2EC8A100A2CED9 /* SettingsViewCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = E43ABC631A2EC8A100A2CED9 /* SettingsViewCtrl.m */; };
 		E43ABC6A1A2ED24800A2CED9 /* DetailViewCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = E43ABC691A2ED24800A2CED9 /* DetailViewCtrl.m */; };
 		E43ABC6C1A2ED91F00A2CED9 /* SimSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = E43ABC6B1A2ED91F00A2CED9 /* SimSettings.plist */; };
+		E476AEFD1A32B46E00D3C613 /* MemAccessCellCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = E476AEFC1A32B46E00D3C613 /* MemAccessCellCtrl.m */; };
+		E476AF001A32D55500D3C613 /* TlbListCellCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = E476AEFF1A32D55500D3C613 /* TlbListCellCtrl.m */; };
+		E476AF031A32D58200D3C613 /* PageListCellCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = E476AF021A32D58200D3C613 /* PageListCellCtrl.m */; };
+		E476AF061A32D68600D3C613 /* MemAddressCellCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = E476AF051A32D68600D3C613 /* MemAddressCellCtrl.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +58,14 @@
 		E43ABC681A2ED24800A2CED9 /* DetailViewCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewCtrl.h; sourceTree = "<group>"; };
 		E43ABC691A2ED24800A2CED9 /* DetailViewCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewCtrl.m; sourceTree = "<group>"; };
 		E43ABC6B1A2ED91F00A2CED9 /* SimSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SimSettings.plist; sourceTree = "<group>"; };
+		E476AEFB1A32B46E00D3C613 /* MemAccessCellCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemAccessCellCtrl.h; sourceTree = "<group>"; };
+		E476AEFC1A32B46E00D3C613 /* MemAccessCellCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemAccessCellCtrl.m; sourceTree = "<group>"; };
+		E476AEFE1A32D55500D3C613 /* TlbListCellCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TlbListCellCtrl.h; sourceTree = "<group>"; };
+		E476AEFF1A32D55500D3C613 /* TlbListCellCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TlbListCellCtrl.m; sourceTree = "<group>"; };
+		E476AF011A32D58200D3C613 /* PageListCellCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageListCellCtrl.h; sourceTree = "<group>"; };
+		E476AF021A32D58200D3C613 /* PageListCellCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PageListCellCtrl.m; sourceTree = "<group>"; };
+		E476AF041A32D68600D3C613 /* MemAddressCellCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemAddressCellCtrl.h; sourceTree = "<group>"; };
+		E476AF051A32D68600D3C613 /* MemAddressCellCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemAddressCellCtrl.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +166,14 @@
 			children = (
 				E43ABC681A2ED24800A2CED9 /* DetailViewCtrl.h */,
 				E43ABC691A2ED24800A2CED9 /* DetailViewCtrl.m */,
+				E476AEFB1A32B46E00D3C613 /* MemAccessCellCtrl.h */,
+				E476AEFC1A32B46E00D3C613 /* MemAccessCellCtrl.m */,
+				E476AEFE1A32D55500D3C613 /* TlbListCellCtrl.h */,
+				E476AEFF1A32D55500D3C613 /* TlbListCellCtrl.m */,
+				E476AF011A32D58200D3C613 /* PageListCellCtrl.h */,
+				E476AF021A32D58200D3C613 /* PageListCellCtrl.m */,
+				E476AF041A32D68600D3C613 /* MemAddressCellCtrl.h */,
+				E476AF051A32D68600D3C613 /* MemAddressCellCtrl.m */,
 			);
 			name = "Detail View";
 			sourceTree = "<group>";
@@ -278,11 +298,15 @@
 			files = (
 				E43ABC3A1A2EC4E400A2CED9 /* AppDelegate.m in Sources */,
 				E43ABC3D1A2EC4E400A2CED9 /* MasterViewController.m in Sources */,
+				E476AF001A32D55500D3C613 /* TlbListCellCtrl.m in Sources */,
 				E43ABC641A2EC8A100A2CED9 /* SettingsViewCtrl.m in Sources */,
 				E43ABC611A2EC88400A2CED9 /* SimulatorViewCtrl.m in Sources */,
+				E476AEFD1A32B46E00D3C613 /* MemAccessCellCtrl.m in Sources */,
+				E476AF061A32D68600D3C613 /* MemAddressCellCtrl.m in Sources */,
 				E43ABC371A2EC4E400A2CED9 /* main.m in Sources */,
 				E43ABC401A2EC4E400A2CED9 /* DetailViewController.m in Sources */,
 				E43ABC6A1A2ED24800A2CED9 /* DetailViewCtrl.m in Sources */,
+				E476AF031A32D58200D3C613 /* PageListCellCtrl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -475,6 +499,7 @@
 				E43ABC591A2EC4E400A2CED9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E43ABC5A1A2EC4E400A2CED9 /* Build configuration list for PBXNativeTarget "MemSimulatorTests" */ = {
 			isa = XCConfigurationList;
@@ -483,6 +508,7 @@
 				E43ABC5C1A2EC4E400A2CED9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
