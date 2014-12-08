@@ -9,7 +9,7 @@
         <scene sceneID="pY4-Hu-kfo">
             <objects>
                 <navigationController id="RMx-3f-FxP" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Settings" id="EmV-oC-b42"/>
+                    <tabBarItem key="tabBarItem" title="Settings" image="Settings" id="EmV-oC-b42"/>
                     <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Pmd-2v-anx">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -254,7 +254,6 @@
                                                         <constraint firstAttribute="height" constant="25" id="cgF-Tg-fFP"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EZq-da-IvG">
@@ -827,7 +826,7 @@
         <scene sceneID="hZF-2B-KKd">
             <objects>
                 <navigationController id="qWz-o4-Y6r" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Simulator" id="tJY-15-Kxb"/>
+                    <tabBarItem key="tabBarItem" title="Simulator" image="MemChip" id="tJY-15-Kxb"/>
                     <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="hJE-Hi-Ir9">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1002,4 +1001,8 @@
             <point key="canvasLocation" x="1562" y="-766"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="MemChip" width="25" height="25"/>
+        <image name="Settings" width="25" height="25"/>
+    </resources>
 </document>

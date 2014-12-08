@@ -391,7 +391,7 @@
     // Insert into History List
     NSNumber* hisSeq = [NSNumber numberWithInteger:mAccessList.count];
     NSNumber* hisPageNo = accPageNo;
-    NSNumber* hisFrameNo = [dictTlbListItem objectForKey:@"frameno"];
+    NSNumber* hisFrameNo = accFrameNo;   //[dictTlbListItem objectForKey:@"frameno"];
     NSNumber* hisOffset = accOffset;
     NSNumber* hisTlbIndex = [dictTlbListItem objectForKey:@"seq"];
     NSDictionary* dictHisListItem = [self createAccessHistoryListItemWithSeq:hisSeq AndPageNo:hisPageNo AndFrameNo:hisFrameNo AndOffset:hisOffset AndTlbIndex:hisTlbIndex AndTlbHit:isTlbHit AndPageHit:isPageHit AndColor:dictColor];
