@@ -11,6 +11,7 @@
 @implementation PageListCellCtrl
 
 @synthesize lblFrameNo;
+@synthesize viewColor;
 
 - (void)awakeFromNib {
     // Initialization code
@@ -30,5 +31,12 @@
     } else {
         [lblFrameNo setText:@""];
     }
+    
+    NSDictionary* color = [pageInfo objectForKey:@"color"];
+    NSNumber* red = [color objectForKey:@"red"];
+    NSNumber* green = [color objectForKey:@"green"];
+    NSNumber* blue = [color objectForKey:@"blue"];
+    viewColor.backgroundColor = [UIColor colorWithRed:(CGFloat)(red.floatValue / 255.0) green:(CGFloat)(green.floatValue / 255.0) blue:(CGFloat)(blue.floatValue / 255.0) alpha:1.0];
+
 }
 @end

@@ -176,20 +176,23 @@
     NSNumber* accPageNo = [NSNumber numberWithInteger:(decAddress / mPageSize.integerValue)];
     NSNumber* accOffset = [NSNumber numberWithInteger:(decAddress % mPageSize.integerValue)];
     NSNumber* accFrameNo = [NSNumber numberWithInteger:-1];
+    NSDictionary* dictColor = @{@"red":[NSNumber numberWithFloat:(CGFloat)(arc4random() % 256)],
+                                @"green":[NSNumber numberWithFloat:(CGFloat)(arc4random() % 256)],
+                                @"blue":[NSNumber numberWithFloat:(CGFloat)(arc4random() % 256)]};
     
     BOOL isTlbHit = YES;
     BOOL isPageHit = YES;
     
     // Check Tlb Exist
-    NSDictionary* dictTlbListItem = [self checkTlbListWithPageNo:accPageNo];
+    NSMutableDictionary* dictTlbListItem = [self checkTlbListWithPageNo:accPageNo];
     if (dictTlbListItem == nil) {
         isTlbHit = NO;
         // Check Page Table Exist
-        NSDictionary* dictPageListItem = [self checkPageListWithPageNo:accPageNo];
+        NSMutableDictionary* dictPageListItem = [self checkPageListWithPageNo:accPageNo];
         if (dictPageListItem == nil) {  // Page Fault
             isPageHit = NO;
             // Find Available Free Frame
-            NSDictionary* dictPageQueueItem;
+            NSMutableDictionary* dictPageQueueItem;
             accFrameNo = [self getAvailableFreeFrame];
             if (accFrameNo.integerValue < 0) {
                 dictPageQueueItem = [self getNextReplaceFrameByPageAlgorithm:mPageAlgorithm];
@@ -211,6 +214,10 @@
                 if (arrOffset.count > 0) {
                     [arrOffset removeAllObjects];
                 }
+                NSMutableArray* arrColor = [dictFrameListItem objectForKey:@"colors"];
+                if (arrColor.count > 0) {
+                    [arrColor removeAllObjects];
+                }
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -225,8 +232,10 @@
                 NSMutableDictionary* dictRmPageListItem = [arrPage objectAtIndex:i];
                 [dictRmPageListItem setObject:[NSNumber numberWithInteger:-1] forKey:@"frameno"];
                 [dictRmPageListItem setObject:[NSNumber numberWithBool:NO] forKey:@"validbit"];
+                [dictRmPageListItem setObject:[self getWhiteColorDictionary] forKey:@"color"];
             }
             dictPageListItem = [self createPageListItemWithSeq:accPageNo AndFrameNo:accFrameNo];
+            [dictPageListItem setObject:dictColor forKey:@"color"];
             [mPageList removeObjectAtIndex:accPageNo.integerValue];
             [mPageList insertObject:dictPageListItem atIndex:accPageNo.integerValue];
             
@@ -235,33 +244,25 @@
             });
             
             // Update Page Queue
+            [dictPageQueueItem setObject:[NSNumber numberWithBool:YES] forKey:@"validbit"];
+            [dictPageQueueItem setObject:dictColor forKey:@"color"];
             [mPageQueue insertObject:dictPageQueueItem atIndex:0];
         }
         
         accFrameNo = [dictPageListItem objectForKey:@"frameno"];
         
-        // Update Page Queue (LRU)
-        if ([mPageAlgorithm isEqualToString:@"LRU"]) {
-            NSPredicate* predPageQueue = [NSPredicate predicateWithFormat:@"%K = %@",@"frameno",accFrameNo];
-            NSArray* arrPageQueue = [mPageQueue filteredArrayUsingPredicate:predPageQueue];
-            if ([arrPageQueue count] > 0) {
-                NSDictionary* dictPageQueueItem = [arrPageQueue objectAtIndex:0];
-                [mPageQueue removeObject:dictPageQueueItem];
-                [mPageQueue insertObject:dictPageQueueItem atIndex:0];
-            } else {
-                @throw [NSException exceptionWithName:@"framenotinqueue" reason:@"Frame No not in Page Queue" userInfo:nil];
-            }
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tabPageList reloadData];
-        });
-        
         // Find Available Free Tlb
-        NSDictionary* dictTlbQueueItem;
+        NSMutableDictionary* dictTlbQueueItem;
         NSNumber* avaTlbNo = [self getAvailableFreeTlb];
         if (avaTlbNo.integerValue < 0) {
-            dictTlbQueueItem = [self getNextReplaceTlbByTlbAlgorithm:mTlbAlgorithm];
+            NSPredicate* predTlbQueue = [NSPredicate predicateWithFormat:@"%K = %@",@"frameno",accFrameNo];
+            NSArray* arrTlbQueue = [mTlbQueue filteredArrayUsingPredicate:predTlbQueue];
+            if (arrTlbQueue.count > 0) {
+                dictTlbQueueItem = [arrTlbQueue objectAtIndex:0];
+                [mTlbQueue removeObject:dictTlbQueueItem];
+            } else {
+                dictTlbQueueItem = [self getNextReplaceTlbByTlbAlgorithm:mTlbAlgorithm];
+            }
             if (dictTlbQueueItem == nil) {
                 @throw [NSException exceptionWithName:@"unknowtlbalgorithm" reason:@"TLB Algorithm is Undefined" userInfo:nil];
             }
@@ -271,16 +272,20 @@
         
         // Update Tlb
         NSNumber* changeTlbIdx = [dictTlbQueueItem objectForKey:@"seq"];
-        NSNumber* changePageNo = [dictTlbQueueItem objectForKey:@"pageno"];
-        NSPredicate* predTlb = [NSPredicate predicateWithFormat:@"%K = %@",@"pageno",changePageNo];
+        //NSNumber* changePageNo = [dictTlbQueueItem objectForKey:@"pageno"];
+        NSNumber* changeFrameNo = [dictTlbQueueItem objectForKey:@"frameno"];
+        //NSPredicate* predTlb = [NSPredicate predicateWithFormat:@"%K = %@",@"pageno",changePageNo];
+        NSPredicate* predTlb = [NSPredicate predicateWithFormat:@"%K = %@",@"frameno",changeFrameNo];
         NSArray* arrTlb = [mTlbList filteredArrayUsingPredicate:predTlb];
         for (int i = 0; i < arrTlb.count; i++) {
             NSMutableDictionary* dictRmTlbListItem = [arrTlb objectAtIndex:i];
             [dictRmTlbListItem setObject:[NSNumber numberWithInteger:-1] forKey:@"pageno"];
             [dictRmTlbListItem setObject:[NSNumber numberWithInteger:-1] forKey:@"frameno"];
             [dictRmTlbListItem setObject:[NSNumber numberWithBool:NO] forKey:@"validbit"];
+            [dictRmTlbListItem setObject:[self getWhiteColorDictionary] forKey:@"color"];
         }
         dictTlbListItem = [self createTlbListItemWithSeq:changeTlbIdx AndPageNo:accPageNo AndFrameNo:accFrameNo];
+        [dictTlbListItem setObject:dictColor forKey:@"color"];
         [mTlbList removeObjectAtIndex:changeTlbIdx.integerValue];
         [mTlbList insertObject:dictTlbListItem atIndex:changeTlbIdx.integerValue];
         
@@ -289,17 +294,40 @@
         });
         
         // Update Tlb Queue
+        [dictTlbQueueItem setObject:accPageNo forKey:@"pageno"];
+        [dictTlbQueueItem setObject:accFrameNo forKey:@"frameno"];
+        [dictTlbQueueItem setObject:[NSNumber numberWithBool:YES] forKey:@"validbit"];
+        [dictTlbQueueItem setObject:dictColor forKey:@"color"];
         [mTlbQueue insertObject:dictTlbQueueItem atIndex:0];
     }
     
     accFrameNo = [dictTlbListItem objectForKey:@"frameno"];
+
+    // Update Page Queue (LRU)
+    if ([mPageAlgorithm isEqualToString:@"LRU"]) {
+        NSPredicate* predPageQueue = [NSPredicate predicateWithFormat:@"%K = %@",@"frameno",accFrameNo];
+        NSArray* arrPageQueue = [mPageQueue filteredArrayUsingPredicate:predPageQueue];
+        if ([arrPageQueue count] > 0) {
+            NSMutableDictionary* dictPageQueueItem = [arrPageQueue objectAtIndex:0];
+            [dictPageQueueItem setObject:dictColor forKey:@"color"];
+            [mPageQueue removeObject:dictPageQueueItem];
+            [mPageQueue insertObject:dictPageQueueItem atIndex:0];
+        } else {
+            @throw [NSException exceptionWithName:@"framenotinqueue" reason:@"Frame No not in Page Queue" userInfo:nil];
+        }
+    }
     
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [self.tabPageList reloadData];
+//    });
+
     // Update Tlb Queue (LRU}
     if ([mTlbAlgorithm isEqualToString:@"LRU"]) {
         NSPredicate* predTlbQueue = [NSPredicate predicateWithFormat:@"%K = %@",@"pageno",accPageNo];
         NSArray* arrTlbQueue = [mTlbQueue filteredArrayUsingPredicate:predTlbQueue];
         if ([arrTlbQueue count] > 0) {
-            NSDictionary* dictTlbQueueItem = [arrTlbQueue objectAtIndex:0];
+            NSMutableDictionary* dictTlbQueueItem = [arrTlbQueue objectAtIndex:0];
+            [dictTlbQueueItem setObject:dictColor forKey:@"color"];
             [mTlbQueue removeObject:dictTlbQueueItem];
             [mTlbQueue insertObject:dictTlbQueueItem atIndex:0];
         } else {
@@ -307,9 +335,9 @@
         }
     }
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tabTlbList reloadData];
-    });
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [self.tabTlbList reloadData];
+//    });
     
     // Update Frame List
     NSPredicate* predFrame = [NSPredicate predicateWithFormat:@"%K = %@",@"frameno",accFrameNo];
@@ -317,8 +345,13 @@
     if (arrFrame.count > 0) {
         NSDictionary* dictFrameListItem = [arrFrame objectAtIndex:0];
         NSMutableArray* arrOffset = [dictFrameListItem objectForKey:@"offsets"];
+        NSMutableArray* arrColor = [dictFrameListItem objectForKey:@"colors"];
         if ([arrOffset containsObject:accOffset] == NO) {
             [arrOffset addObject:accOffset];
+            [arrColor addObject:dictColor];
+        } else {
+            NSInteger indexAccOffset = [arrOffset indexOfObjectIdenticalTo:accOffset];
+            [arrColor setObject:dictColor atIndexedSubscript:indexAccOffset];
         }
     }
     
@@ -326,12 +359,33 @@
         [self.tabMemAddress reloadData];
     });
     
+    // Update Page Table
+    NSPredicate* predPage = [NSPredicate predicateWithFormat:@"%K = %@",@"frameno",accFrameNo];
+    NSArray* arrPage = [mPageList filteredArrayUsingPredicate:predPage];
+    if (arrPage.count > 0) {
+        NSMutableDictionary* dictPageListItem = [arrPage objectAtIndex:0];
+        [dictPageListItem setObject:dictColor forKey:@"color"];
+    }
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tabPageList reloadData];
+    });
+
+    // Update Tlb List
+    [dictTlbListItem setObject:dictColor forKey:@"color"];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tabTlbList reloadData];
+    });
+
     // Insert into Access List
-    NSDictionary* dictAccListItem = [self createAccessListItemWithSeq:[NSNumber numberWithInteger:mAccessList.count] AndPageNo:accPageNo AndOffset:accOffset];
+    NSMutableDictionary* dictAccListItem = [self createAccessListItemWithSeq:[NSNumber numberWithInteger:mAccessList.count] AndPageNo:accPageNo AndOffset:accOffset];
+    [dictAccListItem setObject:dictColor forKey:@"color"];
     [mAccessList insertObject:dictAccListItem atIndex:mAccessList.count];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tabMemAccessList insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:mAccessList.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tabMemAccessList reloadData];
     });
     
     // Insert into History List
@@ -340,7 +394,7 @@
     NSNumber* hisFrameNo = [dictTlbListItem objectForKey:@"frameno"];
     NSNumber* hisOffset = accOffset;
     NSNumber* hisTlbIndex = [dictTlbListItem objectForKey:@"seq"];
-    NSDictionary* dictHisListItem = [self createAccessHistoryListItemWithSeq:hisSeq AndPageNo:hisPageNo AndFrameNo:hisFrameNo AndOffset:hisOffset AndTlbIndex:hisTlbIndex AndTlbHit:isTlbHit AndPageHit:isPageHit];
+    NSDictionary* dictHisListItem = [self createAccessHistoryListItemWithSeq:hisSeq AndPageNo:hisPageNo AndFrameNo:hisFrameNo AndOffset:hisOffset AndTlbIndex:hisTlbIndex AndTlbHit:isTlbHit AndPageHit:isPageHit AndColor:dictColor];
     [mMemoryAccessHistory insertObject:dictHisListItem atIndex:mMemoryAccessHistory.count];
 
 }
@@ -367,7 +421,7 @@
     }
     [mTlbList removeAllObjects];
     for (int i = 0; i < size.intValue; i++) {
-        NSMutableDictionary* dictTlbListItem = [NSMutableDictionary dictionaryWithDictionary:@{@"seq":[NSNumber numberWithInt:i],@"pageno":[NSNumber numberWithInteger:-1],@"frameno":[NSNumber numberWithInteger:-1],@"validbit":@NO}];
+        NSMutableDictionary* dictTlbListItem = [NSMutableDictionary dictionaryWithDictionary:@{@"seq":[NSNumber numberWithInt:i],@"pageno":[NSNumber numberWithInteger:-1],@"frameno":[NSNumber numberWithInteger:-1],@"validbit":[NSNumber numberWithBool:NO],@"color":[self getWhiteColorDictionary]}];
         [mTlbList addObject:dictTlbListItem];
     }
     [self.tabTlbList reloadData];
@@ -379,7 +433,7 @@
     }
     [mPageList removeAllObjects];
     for (int i = 0; i < pageno.intValue; i++) {
-        NSMutableDictionary* dictPageListItem = [NSMutableDictionary dictionaryWithDictionary:@{@"seq":[NSNumber numberWithInt:i],@"frameno":[NSNumber numberWithInteger:-1],@"validbit":@NO}];
+        NSMutableDictionary* dictPageListItem = [NSMutableDictionary dictionaryWithDictionary:@{@"seq":[NSNumber numberWithInt:i],@"frameno":[NSNumber numberWithInteger:-1],@"validbit":[NSNumber numberWithBool:NO],@"color":[self getWhiteColorDictionary]}];
         [mPageList addObject:dictPageListItem];
     }
     [self.tabPageList reloadData];
@@ -391,7 +445,7 @@
     }
     [mFrameList removeAllObjects];
     for (int i = 0; i < pageno.intValue; i++) {
-        NSMutableDictionary* dictFrameListItem = [NSMutableDictionary dictionaryWithDictionary:@{@"frameno":[NSNumber numberWithInt:i],@"offsets":[[NSMutableArray alloc] init]}];
+        NSMutableDictionary* dictFrameListItem = [NSMutableDictionary dictionaryWithDictionary:@{@"frameno":[NSNumber numberWithInt:i],@"offsets":[[NSMutableArray alloc] init],@"colors":[[NSMutableArray alloc] init]}];
         [mFrameList addObject:dictFrameListItem];
     }
     [self.tabMemAddress reloadData];
@@ -411,7 +465,7 @@
     [mPageQueue removeAllObjects];
 }
 
-- (NSDictionary*)checkTlbListWithPageNo:(NSNumber*)pageno {
+- (NSMutableDictionary*)checkTlbListWithPageNo:(NSNumber*)pageno {
     NSPredicate* predTlb = [NSPredicate predicateWithFormat:@"%K = %@",@"pageno",pageno];
     NSArray* arrTlb = [mTlbList filteredArrayUsingPredicate:predTlb];
     if ([arrTlb count] > 0) {
@@ -421,7 +475,7 @@
     }
 }
 
-- (NSDictionary*)checkPageListWithPageNo:(NSNumber*)pageno {
+- (NSMutableDictionary*)checkPageListWithPageNo:(NSNumber*)pageno {
     NSPredicate* predPage = [NSPredicate predicateWithFormat:@"%K = %@",@"seq",pageno];
     NSArray* arrPage = [mPageList filteredArrayUsingPredicate:predPage];
     if ([arrPage count] > 0) {
@@ -436,28 +490,28 @@
     }
 }
 
-- (NSDictionary*)createAccessListItemWithSeq:(NSNumber*)seq AndPageNo:(NSNumber*)pageno AndOffset:(NSNumber*)offset {
-    return [NSMutableDictionary dictionaryWithDictionary:@{@"seq":seq,@"pageno":pageno,@"offset":offset}];
+- (NSMutableDictionary*)createAccessListItemWithSeq:(NSNumber*)seq AndPageNo:(NSNumber*)pageno AndOffset:(NSNumber*)offset {
+    return [NSMutableDictionary dictionaryWithDictionary:@{@"seq":seq,@"pageno":pageno,@"offset":offset,@"color":[self getWhiteColorDictionary]}];
 }
 
-- (NSDictionary*)createPageQueueItemWithSeq:(NSNumber*)seq AndFrameNo:(NSNumber*)frameno {
-    return [NSMutableDictionary dictionaryWithDictionary:@{@"seq":seq,@"frameno":frameno,@"validbit":@YES}];
+- (NSMutableDictionary*)createPageQueueItemWithSeq:(NSNumber*)seq AndFrameNo:(NSNumber*)frameno {
+    return [NSMutableDictionary dictionaryWithDictionary:@{@"seq":seq,@"frameno":frameno,@"validbit":[NSNumber numberWithBool:YES],@"color":[self getWhiteColorDictionary]}];
 }
 
-- (NSDictionary*)createPageListItemWithSeq:(NSNumber*)seq AndFrameNo:(NSNumber*)frameno {
-    return [NSMutableDictionary dictionaryWithDictionary:@{@"seq":seq,@"frameno":frameno,@"validbit":@YES}];
+- (NSMutableDictionary*)createPageListItemWithSeq:(NSNumber*)seq AndFrameNo:(NSNumber*)frameno {
+    return [NSMutableDictionary dictionaryWithDictionary:@{@"seq":seq,@"frameno":frameno,@"validbit":[NSNumber numberWithBool:YES],@"color":[self getWhiteColorDictionary]}];
 }
 
-- (NSDictionary*)createTlbQueueItemWIthSeq:(NSNumber*)seq AndPageNo:(NSNumber*)pageno AndFrameNo:(NSNumber*)frameno {
-    return [NSMutableDictionary dictionaryWithDictionary:@{@"seq":seq,@"pageno":pageno,@"frameno":frameno,@"validbit":[NSNumber numberWithBool:YES]}];
+- (NSMutableDictionary*)createTlbQueueItemWIthSeq:(NSNumber*)seq AndPageNo:(NSNumber*)pageno AndFrameNo:(NSNumber*)frameno {
+    return [NSMutableDictionary dictionaryWithDictionary:@{@"seq":seq,@"pageno":pageno,@"frameno":frameno,@"validbit":[NSNumber numberWithBool:YES],@"color":[self getWhiteColorDictionary]}];
 }
 
-- (NSDictionary*)createTlbListItemWithSeq:(NSNumber*)seq AndPageNo:(NSNumber*)pageno AndFrameNo:(NSNumber*)frameno {
-    return [NSMutableDictionary dictionaryWithDictionary:@{@"seq":seq,@"pageno":pageno,@"frameno":frameno,@"validbit":[NSNumber numberWithBool:YES]}];
+- (NSMutableDictionary*)createTlbListItemWithSeq:(NSNumber*)seq AndPageNo:(NSNumber*)pageno AndFrameNo:(NSNumber*)frameno {
+    return [NSMutableDictionary dictionaryWithDictionary:@{@"seq":seq,@"pageno":pageno,@"frameno":frameno,@"validbit":[NSNumber numberWithBool:YES],@"color":[self getWhiteColorDictionary]}];
 }
 
-- (NSDictionary*)createAccessHistoryListItemWithSeq:(NSNumber*)seq AndPageNo:(NSNumber*)pageno AndFrameNo:(NSNumber*)frameno AndOffset:(NSNumber*)offset AndTlbIndex:(NSNumber*)tlbindex AndTlbHit:(BOOL)istlbhit AndPageHit:(BOOL)ispagehit {
-    return [NSMutableDictionary dictionaryWithDictionary:@{@"seq":seq,@"pageno":pageno,@"frameno":frameno,@"offset":offset,@"tlbindex":tlbindex,@"tlbhit":[NSNumber numberWithBool:istlbhit],@"pagehit":[NSNumber numberWithBool:ispagehit]}];
+- (NSMutableDictionary*)createAccessHistoryListItemWithSeq:(NSNumber*)seq AndPageNo:(NSNumber*)pageno AndFrameNo:(NSNumber*)frameno AndOffset:(NSNumber*)offset AndTlbIndex:(NSNumber*)tlbindex AndTlbHit:(BOOL)istlbhit AndPageHit:(BOOL)ispagehit AndColor:(NSDictionary*)color {
+    return [NSMutableDictionary dictionaryWithDictionary:@{@"seq":seq,@"pageno":pageno,@"frameno":frameno,@"offset":offset,@"tlbindex":tlbindex,@"tlbhit":[NSNumber numberWithBool:istlbhit],@"pagehit":[NSNumber numberWithBool:ispagehit],@"color":color}];
 }
 
 - (NSNumber*)getAvailableFreeFrame {
@@ -478,8 +532,8 @@
     }
 }
 
-- (NSDictionary*)getNextReplaceFrameByPageAlgorithm:(NSString*)pagealgorithm {
-    NSDictionary* resultItem;
+- (NSMutableDictionary*)getNextReplaceFrameByPageAlgorithm:(NSString*)pagealgorithm {
+    NSMutableDictionary* resultItem;
     if ([pagealgorithm isEqualToString:@"FIFO"]) {
         resultItem = [mPageQueue lastObject];
         [mPageQueue removeLastObject];
@@ -496,17 +550,17 @@
                 return (NSComparisonResult)NSOrderedDescending;
             }
         }];
+        int i = 0;
         do {
-            int i = 0;
             int index = i % [mPageQueue count];
             
-            NSDictionary* dictQueueItem = [sortQueue objectAtIndex:index];
-            if ([dictQueueItem objectForKey:@"validbit"] == NO) {
+            NSMutableDictionary* dictQueueItem = [sortQueue objectAtIndex:index];
+            if ([dictQueueItem objectForKey:@"validbit"] == [NSNumber numberWithBool:NO]) {
                 resultItem = dictQueueItem;
                 [mPageQueue removeObject:resultItem];
                 break;
             } else {
-                [dictQueueItem setValue:@NO forKey:@"validbit"];
+                [dictQueueItem setObject:[NSNumber numberWithBool:NO] forKey:@"validbit"];
             }
             
 //            NSNumber* frameNo = [mPageQueue objectAtIndex:index];
@@ -532,8 +586,8 @@
     return resultItem;
 }
 
-- (NSDictionary*)getNextReplaceTlbByTlbAlgorithm:(NSString*)tlbalgorithm{
-    NSDictionary* resultItem;
+- (NSMutableDictionary*)getNextReplaceTlbByTlbAlgorithm:(NSString*)tlbalgorithm{
+    NSMutableDictionary* resultItem;
     if ([tlbalgorithm isEqualToString:@"FIFO"]) {
         resultItem = [mTlbQueue lastObject];
         [mTlbQueue removeLastObject];
@@ -550,17 +604,17 @@
                 return (NSComparisonResult)NSOrderedDescending;
             }
         }];
+        int i = 0;
         do {
-            int i = 0;
             int index = i % [mTlbQueue count];
             
-            NSDictionary* dictQueueItem = [sortQueue objectAtIndex:index];
-            if ([dictQueueItem objectForKey:@"validbit"] == NO) {
+            NSMutableDictionary* dictQueueItem = [sortQueue objectAtIndex:index];
+            if ([dictQueueItem objectForKey:@"validbit"] == [NSNumber numberWithBool:NO]) {
                 resultItem = dictQueueItem;
                 [mTlbQueue removeObject:resultItem];
                 break;
             } else {
-                [dictQueueItem setValue:@NO forKey:@"validbit"];
+                [dictQueueItem setObject:[NSNumber numberWithBool:NO] forKey:@"validbit"];
             }
             i++;
         } while (YES);
@@ -574,6 +628,9 @@
     
 }
 
+- (NSDictionary*)getWhiteColorDictionary {
+    return @{@"red":[NSNumber numberWithFloat:255.0],@"green":[NSNumber numberWithFloat:255.0],@"blue":[NSNumber numberWithFloat:255.0]};
+}
 #pragma mark - Navigation
 /*
 // In a storyboard-based application, you will often want to do a little preparation before navigation

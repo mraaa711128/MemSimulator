@@ -27,6 +27,7 @@
     NSNumber* frameNo = [memAddressInfo objectForKey:@"frameno"];
     [lblFrameNo setText:[NSString stringWithFormat:@"%ld (0x%lx)",frameNo.integerValue,frameNo.integerValue]];
     NSArray* arrOffsets = [memAddressInfo objectForKey:@"offsets"];
+    NSArray* arrColors = [memAddressInfo objectForKey:@"colors"];
     for (UIView* view in viewOffsets.subviews) {
         [view removeFromSuperview];
     }
@@ -37,6 +38,13 @@
         CGFloat dx = (i % 2)*(viewOffsets.frame.size.width / 2.0);
         UILabel* lblOffset = [[UILabel alloc] initWithFrame:CGRectMake(dx, dy, viewOffsets.frame.size.width / 2.0, 21.0)];
         [lblOffset setText:strOffset];
+        if (arrColors.count == arrOffsets.count) {
+            NSDictionary* color = [arrColors objectAtIndex:i];
+            NSNumber* red = [color objectForKey:@"red"];
+            NSNumber* green = [color objectForKey:@"green"];
+            NSNumber* blue = [color objectForKey:@"blue"];
+            lblOffset.backgroundColor = [UIColor colorWithRed:(CGFloat)(red.floatValue / 255.0) green:(CGFloat)(green.floatValue / 255.0) blue:(CGFloat)(blue.floatValue / 255.0) alpha:1.0];
+        }
         [viewOffsets addSubview:lblOffset];
     }
 }
