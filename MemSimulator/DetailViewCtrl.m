@@ -12,6 +12,7 @@
 #import "TlbListCellCtrl.h"
 #import "PageListCellCtrl.h"
 #import "MemAddressCellCtrl.h"
+#import "ResultViewCtrl.h"
 
 @interface DetailViewCtrl ()
 
@@ -49,6 +50,11 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    ResultViewCtrl* viewResult = (ResultViewCtrl*)segue.destinationViewController;
+    [viewResult setAccessHistoryList:mMemoryAccessHistory];
 }
 
 #pragma mark - TableView DataSource & Delegate 
@@ -389,7 +395,7 @@
     });
     
     // Insert into History List
-    NSNumber* hisSeq = [NSNumber numberWithInteger:mAccessList.count];
+    NSNumber* hisSeq = [NSNumber numberWithInteger:mAccessList.count -1];
     NSNumber* hisPageNo = accPageNo;
     NSNumber* hisFrameNo = accFrameNo;   //[dictTlbListItem objectForKey:@"frameno"];
     NSNumber* hisOffset = accOffset;
@@ -631,6 +637,7 @@
 - (NSDictionary*)getWhiteColorDictionary {
     return @{@"red":[NSNumber numberWithFloat:255.0],@"green":[NSNumber numberWithFloat:255.0],@"blue":[NSNumber numberWithFloat:255.0]};
 }
+
 #pragma mark - Navigation
 /*
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -639,5 +646,10 @@
     // Pass the selected object to the new view controller.
 }
 */
+- (IBAction)buttonResultClick:(id)sender {
+    ResultViewCtrl* viewResult = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"viewResult"];
+    [viewResult setAccessHistoryList:mMemoryAccessHistory];
+    [self.navigationController pushViewController:viewResult animated:YES];
+}
 
 @end
