@@ -119,6 +119,7 @@
 }
 
 - (IBAction)btnResetClick:(id)sender {
+    [self.detailViewCtrl resetSimulator];
 }
 
 #pragma  mark- Text Edit Delegate
