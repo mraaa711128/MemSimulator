@@ -65,5 +65,6 @@
     NSNumber* blue = [color objectForKey:@"blue"];
 
     self.lblSeq.backgroundColor = [UIColor colorWithRed:(CGFloat)(red.floatValue / 255.0) green:(CGFloat)(green.floatValue / 255.0) blue:(CGFloat)(blue.floatValue / 255.0) alpha:1.0];
+    self.lblSeq.textColor = [UIColor whiteColor];
 }
 @end
