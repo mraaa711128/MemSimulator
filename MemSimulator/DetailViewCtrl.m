@@ -99,7 +99,7 @@
     } else if (tableView.tag == 3) {
         UITableViewCell* cell;
         NSInteger frmNo = indexPath.row;
-        if ([mFrame containsObject:[NSString stringWithFormat:@"%ld",frmNo]]) {
+        if ([mFrame containsObject:[NSString stringWithFormat:@"%ld",(long)frmNo]]) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"cellMemAddress"];
             [(MemAddressCellCtrl*)cell setMemAddressInfo:[mFrameList objectAtIndex:indexPath.row]];
         } else {
@@ -117,7 +117,7 @@
             return 66.0;
             break;
         case 3:
-            if ([mFrame containsObject:[NSString stringWithFormat:@"%ld",indexPath.row]]) {
+            if ([mFrame containsObject:[NSString stringWithFormat:@"%ld",(long)indexPath.row]]) {
                 return 150.0;
             } else {
                 return 44.0;
@@ -167,7 +167,7 @@
         }
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self runMemoryManageAlgorithmByAddress:[NSString stringWithFormat:@"%ld",decAddress]];
+            [self runMemoryManageAlgorithmByAddress:[NSString stringWithFormat:@"%ld",(long)decAddress]];
         });
     }
     @catch (NSException *exception) {

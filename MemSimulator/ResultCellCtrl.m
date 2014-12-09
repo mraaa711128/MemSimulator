@@ -29,17 +29,17 @@
     NSNumber* pagehit = [resultItem objectForKey:@"pagehit"];
     NSDictionary* color = [resultItem objectForKey:@"color"];
     
-    [self.lblSeq setText:[NSString stringWithFormat:@"%ld",seq.integerValue]];
-    [self.lblDecVa setText:[NSString stringWithFormat:@"%ld (%ld)",pageno.integerValue,offset.integerValue]];
-    [self.lblHexVa setText:[NSString stringWithFormat:@"0x%lx (0x%lx)",pageno.integerValue,offset.integerValue]];
-    [self.lblDecPn setText:[NSString stringWithFormat:@"%ld",pageno.integerValue]];
-    [self.lblHexPn setText:[NSString stringWithFormat:@"0x%lx",pageno.integerValue]];
-    [self.lblDecOffset setText:[NSString stringWithFormat:@"%ld",offset.integerValue]];
-    [self.lblHexOffset setText:[NSString stringWithFormat:@"0x%lx",offset.integerValue]];
-    [self.lblDecFn setText:[NSString stringWithFormat:@"%ld",frameno.integerValue]];
-    [self.lblHexFn setText:[NSString stringWithFormat:@"0x%lx",frameno.integerValue]];
-    [self.lblDecPa setText:[NSString stringWithFormat:@"%ld (%ld)",frameno.integerValue,offset.integerValue]];
-    [self.lblHexPa setText:[NSString stringWithFormat:@"0x%lx (0x%lx)",frameno.integerValue,offset.integerValue]];
+    [self.lblSeq setText:[NSString stringWithFormat:@"%ld",(long)seq.integerValue]];
+    [self.lblDecVa setText:[NSString stringWithFormat:@"%ld (%ld)",(long)pageno.integerValue,(long)offset.integerValue]];
+    [self.lblHexVa setText:[NSString stringWithFormat:@"0x%lx (0x%lx)",(long)pageno.integerValue,(long)offset.integerValue]];
+    [self.lblDecPn setText:[NSString stringWithFormat:@"%ld",(long)pageno.integerValue]];
+    [self.lblHexPn setText:[NSString stringWithFormat:@"0x%lx",(long)pageno.integerValue]];
+    [self.lblDecOffset setText:[NSString stringWithFormat:@"%ld",(long)offset.integerValue]];
+    [self.lblHexOffset setText:[NSString stringWithFormat:@"0x%lx",(long)offset.integerValue]];
+    [self.lblDecFn setText:[NSString stringWithFormat:@"%ld",(long)frameno.integerValue]];
+    [self.lblHexFn setText:[NSString stringWithFormat:@"0x%lx",(long)frameno.integerValue]];
+    [self.lblDecPa setText:[NSString stringWithFormat:@"%ld (%ld)",(long)frameno.integerValue,(long)offset.integerValue]];
+    [self.lblHexPa setText:[NSString stringWithFormat:@"0x%lx (0x%lx)",(long)frameno.integerValue,(long)offset.integerValue]];
     NSString* strTlbHit;
     if (tlbhit == [NSNumber numberWithBool:YES]) {
         strTlbHit = @"Hit";

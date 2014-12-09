@@ -27,7 +27,7 @@
     NSNumber* frameno = [pageInfo objectForKey:@"frameno"];
     
     if (frameno.integerValue >= 0) {
-        [lblFrameNo setText:[NSString stringWithFormat:@"%ld (0x%lx)",frameno.integerValue,frameno.integerValue]];
+        [lblFrameNo setText:[NSString stringWithFormat:@"%ld (0x%lx)",(long)frameno.integerValue,(long)frameno.integerValue]];
     } else {
         [lblFrameNo setText:@""];
     }

@@ -29,9 +29,9 @@
     NSNumber* seq = [accessInfo objectForKey:@"seq"];
     NSNumber* pageno = [accessInfo objectForKey:@"pageno"];
     NSNumber* offset = [accessInfo objectForKey:@"offset"];
-    NSString* decAddr = [NSString stringWithFormat:@"%ld (%ld)",pageno.integerValue,offset.integerValue];
-    NSString* hexAddr = [NSString stringWithFormat:@"0x%lx (0x%lx)",pageno.integerValue,offset.integerValue];
-    [lblSeq setText:[NSString stringWithFormat:@"%ld",seq.integerValue]];
+    NSString* decAddr = [NSString stringWithFormat:@"%ld (%ld)",(long)pageno.integerValue,(long)offset.integerValue];
+    NSString* hexAddr = [NSString stringWithFormat:@"0x%lx (0x%lx)",(long)pageno.integerValue,(long)offset.integerValue];
+    [lblSeq setText:[NSString stringWithFormat:@"%ld",(long)seq.integerValue]];
     [lblDecAddress setText:decAddr];
     [lblHexAddress setText:hexAddr];
     

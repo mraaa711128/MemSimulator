@@ -25,7 +25,7 @@
 
 - (void)setMemAddressInfo:(NSDictionary *)memAddressInfo {
     NSNumber* frameNo = [memAddressInfo objectForKey:@"frameno"];
-    [lblFrameNo setText:[NSString stringWithFormat:@"%ld (0x%lx)",frameNo.integerValue,frameNo.integerValue]];
+    [lblFrameNo setText:[NSString stringWithFormat:@"%ld (0x%lx)",(long)frameNo.integerValue,(long)frameNo.integerValue]];
     NSArray* arrOffsets = [memAddressInfo objectForKey:@"offsets"];
     NSArray* arrColors = [memAddressInfo objectForKey:@"colors"];
     for (UIView* view in viewOffsets.subviews) {
@@ -33,7 +33,7 @@
     }
     for (int i = 0; i < arrOffsets.count; i++) {
         NSNumber* offset = [arrOffsets objectAtIndex:i];
-        NSString* strOffset = [NSString stringWithFormat:@"%ld (0x%lx)",offset.integerValue,offset.integerValue];
+        NSString* strOffset = [NSString stringWithFormat:@"%ld (0x%lx)",(long)offset.integerValue,(long)offset.integerValue];
         CGFloat dy = (i / 2)*21.0 + 5.0;
         CGFloat dx = (i % 2)*(viewOffsets.frame.size.width / 2.0);
         UILabel* lblOffset = [[UILabel alloc] initWithFrame:CGRectMake(dx, dy, viewOffsets.frame.size.width / 2.0, 21.0)];

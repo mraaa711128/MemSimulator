@@ -29,12 +29,12 @@
     NSNumber* frameno = [tlbInfo objectForKey:@"frameno"];
     
     if (pageno.integerValue >= 0) {
-        [lblPageNo setText:[NSString stringWithFormat:@"%ld (0x%lx)",pageno.integerValue,pageno.integerValue]];
+        [lblPageNo setText:[NSString stringWithFormat:@"%ld (0x%lx)",(long)pageno.integerValue,(long)pageno.integerValue]];
     } else {
         [lblPageNo setText:@""];
     }
     if (frameno.integerValue >= 0) {
-        [lblFrameNo setText:[NSString stringWithFormat:@"%ld (0x%lx)",frameno.integerValue,frameno.integerValue]];
+        [lblFrameNo setText:[NSString stringWithFormat:@"%ld (0x%lx)",(long)frameno.integerValue,(long)frameno.integerValue]];
     } else {
         [lblFrameNo setText:@""];
     }
